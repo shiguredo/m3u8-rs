@@ -1,0 +1,7 @@
+# Seeds for failure cases proptest has generated in the past. It is
+# automatically read and these particular cases re-run before any
+# novel cases are generated.
+#
+# It is recommended to check this file in to source control so that
+# everyone who runs the test benefits from these saved cases.
+cc 5402ad60100a7969b70513586864a802fd299b04fcd1aa99b669012204a0e69d # shrinks to playlist = MediaPlaylist { version: Some(3), target_duration: 1, media_sequence: None, discontinuity_sequence: None, playlist_type: None, i_frames_only: false, independent_segments: false, start: None, server_control: None, part_inf: None, variable_definitions: [], segments: [Segment { duration: 53.19229, title: None, uri: "A", byte_range: None, discontinuity: false, key: None, map: None, program_date_time: None, date_ranges: [], gap: false, bitrate: None, parts: [] }], skip: None, preload_hints: [], rendition_reports: [], end_list: false }
