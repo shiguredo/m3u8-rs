@@ -11,4 +11,7 @@
 
 ## develop
 
+- [CHANGE] MSRV (rust-version) を 1.93 に上げる
+  - @voluntas
+
 ### misc
