@@ -10,11 +10,11 @@ fuzz_target!(|data: &[u8]| {
         }
 
         // Multivariant Playlist を先にパースし、その結果を文脈として Media Playlist をパースする
-        if let Some((multivariant_input, media_input)) = s.split_once("\n#EXTM3U\n") {
-            if let Ok(mv) = shiguredo_m3u8::parse_multivariant_playlist(multivariant_input) {
-                let _ =
-                    shiguredo_m3u8::parse_media_playlist_with_context(media_input, None, Some(&mv));
-            }
+        if let Some((multivariant_input, media_input)) = s.split_once("\n#EXTM3U\n")
+            && let Ok(mv) = shiguredo_m3u8::parse_multivariant_playlist(multivariant_input)
+        {
+            let _ =
+                shiguredo_m3u8::parse_media_playlist_with_context(media_input, None, Some(&mv));
         }
     }
 });
