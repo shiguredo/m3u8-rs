@@ -9,19 +9,14 @@ description = "M3U8 parser and builder for HLS"
 homepage = "https://github.com/shiguredo/m3u8-rs"
 repository = "https://github.com/shiguredo/m3u8-rs"
 readme = "README.md"
-include = ["/src/**", "/LICENSE", "/README.md"]
-
-[lints.rust]
-# cargo-fuzz は実行時に --cfg fuzzing を付与するが、通常ビルドでは未定義のため
-# Rust 1.80 以降の unexpected_cfgs 警告が出る。ここで既知の cfg として登録し抑制する。
-unexpected_cfgs = { level = "warn", check-cfg = ['cfg(fuzzing)'] }
-
-[dependencies]
-
-
-[dev-dependencies]
-insta = "1.43.2"
+include = ["/LICENSE", "/README.md", "/src/**"]
 
 [workspace]
 members = ["pbt"]
 exclude = ["fuzz"]
+
+[dependencies]
+
+[dev-dependencies]
+# 書き出し結果のスナップショットテスト
+insta = "1.43"

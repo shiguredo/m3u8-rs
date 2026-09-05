@@ -1,5 +1,5 @@
 use shiguredo_m3u8::{
-    ErrorKind, multivariant::EncryptionMethod, parse_media_playlist,
+    error::ErrorKind, multivariant::EncryptionMethod, parse_media_playlist,
     parse_media_playlist_with_context, parse_multivariant_playlist, write_media_playlist,
 };
 
@@ -15,7 +15,7 @@ fn parse_media_playlist_keeps_playlist_tail_ll_hls_tags_in_playlist() {
         "#EXT-X-RENDITION-REPORT:URI=\"low.m3u8\",LAST-MSN=10,LAST-PART=1\n",
     );
 
-    let playlist = parse_media_playlist(input).expect("media playlist should parse");
+    let playlist = parse_media_playlist(input).expect("メディアプレイリストのパースに成功すること");
 
     assert_eq!(playlist.preload_hints.len(), 1);
     assert_eq!(playlist.rendition_reports.len(), 1);
@@ -33,7 +33,7 @@ fn parse_media_playlist_keeps_multiple_dateranges_per_segment() {
         "segment.ts\n",
     );
 
-    let playlist = parse_media_playlist(input).expect("media playlist should parse");
+    let playlist = parse_media_playlist(input).expect("メディアプレイリストのパースに成功すること");
 
     assert_eq!(playlist.segments.len(), 1);
     assert_eq!(playlist.segments[0].date_ranges.len(), 2);
@@ -50,7 +50,7 @@ fn parse_media_playlist_keeps_daterange_extra_attributes() {
         "segment.ts\n",
     );
 
-    let playlist = parse_media_playlist(input).expect("extended daterange should parse");
+    let playlist = parse_media_playlist(input).expect("拡張 DATERANGE のパースに成功すること");
     let date_range = &playlist.segments[0].date_ranges[0];
 
     assert_eq!(date_range.extra_attributes.len(), 3);
@@ -184,8 +184,9 @@ fn parse_media_playlist_keeps_ext_x_skip() {
         "segment.ts\n",
     );
 
-    let playlist = parse_media_playlist(input).expect("playlist with skip should parse");
-    let skip = playlist.skip.expect("skip should exist");
+    let playlist =
+        parse_media_playlist(input).expect("SKIP 付きプレイリストのパースに成功すること");
+    let skip = playlist.skip.expect("SKIP が存在すること");
 
     assert_eq!(skip.skipped_segments, 3);
     assert_eq!(
@@ -369,13 +370,13 @@ fn parse_media_playlist_keeps_bis_key_method() {
         "segment.m4s\n",
     );
 
-    let playlist = parse_media_playlist(input).expect("bis key method should parse");
+    let playlist = parse_media_playlist(input).expect("bis 版 KEY メソッドのパースに成功すること");
 
     assert_eq!(
         playlist.segments[0]
             .key
             .as_ref()
-            .expect("key should exist")
+            .expect("キーが存在すること")
             .method,
         EncryptionMethod::SampleAesCtr
     );
@@ -647,7 +648,7 @@ fn parse_media_playlist_imports_variables_from_multivariant_playlist() {
         "#EXT-X-STREAM-INF:BANDWIDTH=1000\n",
         "main.m3u8\n",
     ))
-    .expect("multivariant should parse");
+    .expect("Multivariant Playlist のパースに成功すること");
 
     let media = parse_media_playlist_with_context(
         concat!(
@@ -660,7 +661,7 @@ fn parse_media_playlist_imports_variables_from_multivariant_playlist() {
         None,
         Some(&multivariant),
     )
-    .expect("media playlist import should parse");
+    .expect("IMPORT 付きメディアプレイリストのパースに成功すること");
 
     assert_eq!(media.variable_definitions.len(), 1);
     assert_eq!(media.segments[0].uri, "https://cdn.example.com/segment.ts");
@@ -713,7 +714,7 @@ fn write_media_playlist_snapshot() {
         "#EXT-X-PRELOAD-HINT:TYPE=PART,URI=\"https://{$host}/segment-8.part0.m4s\",BYTERANGE-START=0,BYTERANGE-LENGTH=200\n",
         "#EXT-X-RENDITION-REPORT:URI=\"low.m3u8\",LAST-MSN=8,LAST-PART=1\n",
     ))
-    .expect("media snapshot playlist should parse");
+    .expect("スナップショット用メディアプレイリストのパースに成功すること");
 
     insta::assert_snapshot!(write_media_playlist(&playlist));
 }
@@ -728,7 +729,7 @@ fn write_media_playlist_keeps_daterange_extra_attributes() {
         "#EXTINF:4.0,\n",
         "segment.ts\n",
     ))
-    .expect("extended daterange should parse");
+    .expect("拡張 DATERANGE のパースに成功すること");
 
     let text = write_media_playlist(&playlist);
 
@@ -745,7 +746,7 @@ fn write_media_playlist_sanitizes_quoted_string_values() {
         "#EXTINF:4.0,\n",
         "segment.ts\n",
     ))
-    .expect("playlist should parse");
+    .expect("プレイリストのパースに成功すること");
 
     let mut playlist = playlist;
     playlist.segments[0].map = Some(shiguredo_m3u8::media::Map {

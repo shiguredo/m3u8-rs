@@ -1,5 +1,5 @@
 use shiguredo_m3u8::{
-    ErrorKind, multivariant::EncryptionMethod, parse_multivariant_playlist,
+    error::ErrorKind, multivariant::EncryptionMethod, parse_multivariant_playlist,
     parse_multivariant_playlist_with_uri, write_multivariant_playlist,
 };
 
@@ -165,7 +165,8 @@ fn parse_multivariant_playlist_keeps_bis_media_attributes() {
         "main.m3u8\n",
     );
 
-    let playlist = parse_multivariant_playlist(input).expect("bis media attrs should parse");
+    let playlist =
+        parse_multivariant_playlist(input).expect("bis 版メディア属性のパースに成功すること");
     let rendition = &playlist.renditions[0];
 
     assert_eq!(rendition.channels.as_deref(), Some("16/JOC"));
@@ -280,7 +281,8 @@ fn parse_multivariant_playlist_keeps_bis_session_key_method() {
         "#EXT-X-SESSION-KEY:METHOD=AES-256-GCM,URI=\"key.bin\"\n",
     );
 
-    let playlist = parse_multivariant_playlist(input).expect("bis session key method should parse");
+    let playlist = parse_multivariant_playlist(input)
+        .expect("bis 版 SESSION-KEY メソッドのパースに成功すること");
 
     assert_eq!(playlist.session_keys[0].method, EncryptionMethod::Aes256Gcm);
 }
@@ -387,13 +389,14 @@ fn parse_multivariant_playlist_keeps_content_steering_and_pathway_id() {
         "main-a.m3u8\n",
     );
 
-    let playlist = parse_multivariant_playlist(input).expect("content steering should parse");
+    let playlist =
+        parse_multivariant_playlist(input).expect("CONTENT-STEERING のパースに成功すること");
 
     assert_eq!(
         playlist
             .content_steering
             .as_ref()
-            .expect("content steering should exist")
+            .expect("CONTENT-STEERING が存在すること")
             .server_uri,
         "/steering.json"
     );
@@ -505,7 +508,7 @@ fn parse_multivariant_playlist_substitutes_named_variables() {
         "https://{$host}/main.m3u8\n",
     );
 
-    let playlist = parse_multivariant_playlist(input).expect("named variable should parse");
+    let playlist = parse_multivariant_playlist(input).expect("名前付き変数のパースに成功すること");
 
     assert_eq!(playlist.variable_definitions.len(), 1);
     assert_eq!(
@@ -527,7 +530,7 @@ fn parse_multivariant_playlist_substitutes_query_params() {
         input,
         "https://playlist.example.com/master.m3u8?token=abc%20123",
     )
-    .expect("queryparam should parse");
+    .expect("QUERYPARAM のパースに成功すること");
 
     assert_eq!(
         playlist.variant_streams[0].uri,
@@ -556,7 +559,7 @@ fn write_multivariant_playlist_snapshot() {
         ),
         "https://playlist.example.com/master.m3u8?token=abc%20123",
     )
-    .expect("multivariant snapshot playlist should parse");
+    .expect("スナップショット用 Multivariant Playlist のパースに成功すること");
 
     insta::assert_snapshot!(write_multivariant_playlist(&playlist));
 }
@@ -569,7 +572,7 @@ fn write_multivariant_playlist_sanitizes_quoted_string_values() {
         "#EXT-X-STREAM-INF:BANDWIDTH=1000\n",
         "main.m3u8\n",
     ))
-    .expect("playlist should parse");
+    .expect("プレイリストのパースに成功すること");
 
     let mut playlist = playlist;
     playlist.renditions[0].name = String::from("ja\"\nmain");

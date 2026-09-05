@@ -1,3 +1,5 @@
+//! Media Playlist のパース処理を提供する
+
 use crate::{
     attribute::{
         get_attribute, parse_attribute_entries, parse_bool_attribute, parse_byterange,

@@ -1,3 +1,5 @@
+//! M3U8 のパースおよびビルド時のエラー型を提供する
+
 use std::fmt;
 
 /// M3U8 のパースおよびビルド時のエラー
@@ -31,16 +33,24 @@ impl std::error::Error for Error {}
 
 /// エラーの種別
 #[derive(Debug, Clone, PartialEq, Eq)]
-#[non_exhaustive]
 pub enum ErrorKind {
     /// `#EXTM3U` ヘッダーがない
     MissingHeader,
     /// 必須タグが欠けている
-    MissingTag { tag: &'static str },
+    MissingTag {
+        /// 欠けているタグ名
+        tag: &'static str,
+    },
     /// タグの値が不正
-    InvalidTagValue { tag: &'static str },
+    InvalidTagValue {
+        /// 値が不正なタグ名
+        tag: &'static str,
+    },
     /// 属性の値が不正
-    InvalidAttributeValue { attribute: &'static str },
+    InvalidAttributeValue {
+        /// 値が不正な属性名
+        attribute: &'static str,
+    },
     /// 不正な URI
     InvalidUri,
     /// 予期しない EOF

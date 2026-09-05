@@ -1,3 +1,5 @@
+//! 属性リスト (`KEY=VALUE`) のパース・生成を提供する
+
 use crate::error::{Error, ErrorKind, Result};
 use std::collections::HashSet;
 

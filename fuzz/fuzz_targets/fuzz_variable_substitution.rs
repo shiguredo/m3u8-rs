@@ -1,20 +1,13 @@
 #![no_main]
 
 use libfuzzer_sys::fuzz_target;
-use std::collections::HashMap;
 
 fuzz_target!(|data: &[u8]| {
     if let Ok(s) = std::str::from_utf8(data) {
-        // 最初の改行で分割し、前半を変数定義、後半を展開対象として使う
-        let (vars_part, line) = s.split_once('\n').unwrap_or(("", s));
-
-        let mut variables = HashMap::new();
-        for entry in vars_part.split(',') {
-            if let Some((k, v)) = entry.split_once('=') {
-                variables.insert(k.to_string(), v.to_string());
-            }
-        }
-
-        let _ = shiguredo_m3u8::fuzz_helpers::substitute_variables_in_line(line, &variables);
+        // 任意の文字列をセグメント URI に埋め込み、変数展開を公開 API 経由で行う
+        let input = format!(
+            "#EXTM3U\n#EXT-X-TARGETDURATION:10\n#EXT-X-DEFINE:NAME=\"a\",VALUE=\"x\"\n#EXT-X-DEFINE:NAME=\"b\",IMPORT=a\n#EXTINF:10,\n{s}\n#EXT-X-ENDLIST\n"
+        );
+        let _ = shiguredo_m3u8::parse_media_playlist(&input);
     }
 });

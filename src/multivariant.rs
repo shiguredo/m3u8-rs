@@ -1,3 +1,5 @@
+//! Multivariant Playlist の型定義を提供する
+
 use crate::variable::VariableDefinition;
 
 /// Multivariant Playlist (Master Playlist) の全体
@@ -195,16 +197,22 @@ pub struct StartPoint {
 /// `RESOLUTION`
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Resolution {
+    /// 幅 (ピクセル)
     pub width: u32,
+    /// 高さ (ピクセル)
     pub height: u32,
 }
 
 /// `TYPE` 属性の値
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum MediaType {
+    /// `AUDIO`
     Audio,
+    /// `VIDEO`
     Video,
+    /// `SUBTITLES`
     Subtitles,
+    /// `CLOSED-CAPTIONS`
     ClosedCaptions,
 }
 
@@ -219,33 +227,41 @@ pub enum ClosedCaptions {
 
 /// `HDCP-LEVEL` 属性の値
 #[derive(Debug, Clone, PartialEq, Eq)]
-#[non_exhaustive]
 pub enum HdcpLevel {
+    /// `NONE`
     None,
+    /// `TYPE-0`
     Type0,
+    /// `TYPE-1`
     Type1,
 }
 
 /// `VIDEO-RANGE` 属性の値
 #[derive(Debug, Clone, PartialEq, Eq)]
-#[non_exhaustive]
 pub enum VideoRange {
+    /// `SDR`
     Sdr,
+    /// `HLG`
     Hlg,
+    /// `PQ`
     Pq,
 }
 
 /// `METHOD` 属性の値
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-#[non_exhaustive]
 pub enum EncryptionMethod {
+    /// `NONE`
     None,
+    /// `AES-128`
     Aes128,
     // draft-pantos-hls-rfc8216bis-20.txt 4.4.4.4 由来。
     // 最終 RFC で変更される可能性があるため、仕様変更時は追従が必要。
+    /// `AES-256-GCM`
     Aes256Gcm,
+    /// `SAMPLE-AES`
     SampleAes,
     // draft-pantos-hls-rfc8216bis-20.txt 4.4.4.4 由来。
     // 最終 RFC で変更される可能性があるため、仕様変更時は追従が必要。
+    /// `SAMPLE-AES-CTR`
     SampleAesCtr,
 }

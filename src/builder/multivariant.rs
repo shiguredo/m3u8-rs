@@ -1,3 +1,5 @@
+//! Multivariant Playlist の書き出し処理を提供する
+
 use crate::variable::VariableDefinition;
 use crate::{
     attribute::write_quoted_string,

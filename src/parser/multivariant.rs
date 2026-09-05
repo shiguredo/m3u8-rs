@@ -1,3 +1,5 @@
+//! Multivariant Playlist のパース処理を提供する
+
 use crate::{
     attribute::{
         get_attribute, parse_bool_attribute, parse_f64_attribute, parse_resolution,
@@ -630,7 +632,7 @@ pub(crate) fn substitute_variables_in_line(
     line: &str,
     variables: &HashMap<String, String>,
 ) -> Result<String> {
-    let mut out = String::with_capacity(line.len());
+    let mut out = String::new();
     let mut rest = line;
     while let Some(start) = rest.find("{$") {
         out.push_str(&rest[..start]);
@@ -679,7 +681,7 @@ fn resolve_query_param(playlist_uri: &str, target: &str) -> Option<String> {
 
 fn percent_decode(input: &str) -> Option<String> {
     let bytes = input.as_bytes();
-    let mut out = Vec::with_capacity(bytes.len());
+    let mut out = Vec::new();
     let mut i = 0;
     while i < bytes.len() {
         match bytes[i] {

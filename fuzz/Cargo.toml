@@ -1,82 +1,85 @@
 [package]
 name = "fuzz"
 version = "0.0.0"
-publish = false
 edition = "2024"
+rust-version = "1.93"
+publish = false
 
 [package.metadata]
 cargo-fuzz = true
 
-[dependencies]
-libfuzzer-sys = "0.4"
-shiguredo_m3u8 = { path = ".." }
-
 [[bin]]
+bench = false
+doc = false
 name = "fuzz_multivariant"
 path = "fuzz_targets/fuzz_multivariant.rs"
 test = false
-doc = false
-bench = false
 
 [[bin]]
+bench = false
+doc = false
 name = "fuzz_media"
 path = "fuzz_targets/fuzz_media.rs"
 test = false
-doc = false
-bench = false
 
 [[bin]]
+bench = false
+doc = false
 name = "fuzz_media_roundtrip"
 path = "fuzz_targets/fuzz_media_roundtrip.rs"
 test = false
-doc = false
-bench = false
 
 [[bin]]
+bench = false
+doc = false
 name = "fuzz_multivariant_roundtrip"
 path = "fuzz_targets/fuzz_multivariant_roundtrip.rs"
 test = false
-doc = false
-bench = false
 
 [[bin]]
+bench = false
+doc = false
 name = "fuzz_multivariant_with_uri"
 path = "fuzz_targets/fuzz_multivariant_with_uri.rs"
 test = false
-doc = false
-bench = false
 
 [[bin]]
+bench = false
+doc = false
 name = "fuzz_media_with_context"
 path = "fuzz_targets/fuzz_media_with_context.rs"
 test = false
-doc = false
-bench = false
 
 [[bin]]
+bench = false
+doc = false
 name = "fuzz_attribute_list"
 path = "fuzz_targets/fuzz_attribute_list.rs"
 test = false
-doc = false
-bench = false
 
 [[bin]]
+bench = false
+doc = false
 name = "fuzz_resolution"
 path = "fuzz_targets/fuzz_resolution.rs"
 test = false
-doc = false
-bench = false
 
 [[bin]]
+bench = false
+doc = false
 name = "fuzz_byterange"
 path = "fuzz_targets/fuzz_byterange.rs"
 test = false
-doc = false
-bench = false
 
 [[bin]]
+bench = false
+doc = false
 name = "fuzz_variable_substitution"
 path = "fuzz_targets/fuzz_variable_substitution.rs"
 test = false
-doc = false
-bench = false
+
+[dependencies]
+# cargo-fuzz のランナー (libFuzzer 統合)
+libfuzzer-sys = "0.4"
+# テスト対象のクレート
+shiguredo_m3u8 = { path = ".." }

@@ -1,3 +1,5 @@
+//! Media Playlist の型定義を提供する
+
 use crate::multivariant::{Key, StartPoint};
 use crate::variable::VariableDefinition;
 
@@ -188,7 +190,9 @@ pub struct PreloadHint {
 /// `#EXT-X-PRELOAD-HINT` の `TYPE`
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum PreloadHintType {
+    /// `PART`
     Part,
+    /// `MAP`
     Map,
 }
 

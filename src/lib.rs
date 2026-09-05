@@ -1,44 +1,14 @@
+//! M3U8 パーサーとビルダーを提供するクレート
+
 mod attribute;
 mod builder;
-mod error;
+pub mod error;
 pub mod media;
 pub mod multivariant;
 mod parser;
 pub mod variable;
 
-pub use error::{Error, ErrorKind, Result};
-
-/// fuzzing 用に内部パーサ関数を公開するモジュール
-#[cfg(fuzzing)]
-#[doc(hidden)]
-pub mod fuzz_helpers {
-    use crate::error::Result;
-    use std::collections::HashMap;
-
-    /// `attribute::parse_attribute_entries()` のラッパー
-    pub fn parse_attribute_entries(attrs: &str) -> Result<()> {
-        let _ = crate::attribute::parse_attribute_entries(attrs)?;
-        Ok(())
-    }
-
-    /// `attribute::parse_resolution()` のラッパー
-    pub fn parse_resolution(s: &str) -> Result<crate::multivariant::Resolution> {
-        crate::attribute::parse_resolution(s)
-    }
-
-    /// `attribute::parse_byterange()` のラッパー
-    pub fn parse_byterange(s: &str) -> Result<crate::media::ByteRange> {
-        crate::attribute::parse_byterange(s)
-    }
-
-    /// `parser::multivariant::substitute_variables_in_line()` のラッパー
-    pub fn substitute_variables_in_line(
-        line: &str,
-        variables: &HashMap<String, String>,
-    ) -> Result<String> {
-        crate::parser::multivariant::substitute_variables_in_line(line, variables)
-    }
-}
+use error::Result;
 
 /// Multivariant Playlist (Master Playlist) をパースする
 pub fn parse_multivariant_playlist(input: &str) -> Result<multivariant::MultivariantPlaylist> {

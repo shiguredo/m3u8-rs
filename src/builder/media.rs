@@ -1,3 +1,5 @@
+//! Media Playlist の書き出し処理を提供する
+
 use crate::{attribute::write_quoted_string, variable::VariableDefinition};
 use crate::{
     builder::multivariant::{write_key_attrs, write_start_attrs},
